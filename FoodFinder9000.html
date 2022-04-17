@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Let's Eat</title>
+    <link rel="stylesheet" href="food.css">
+</head>
+<body>
+    <div class = 'search'>
+        <label class="switch">
+            <input type="checkbox">
+            <div class="slider round">
+                <p id = "heap">
+                    Heap <br> Sort
+                </p>
+                <p id = "merge">
+                    Merge <br> Sort
+                </p>
+            </div>
+        </label>
+        <div id="cover">
+            <form method="get" action="">
+                <div class="tb">
+                    <div class="td"><input type="text" placeholder="Search" required></div>
+                    <div class="td" id="s-cover">
+                        <button type="submit">
+                            <div id="s-circle"></div>
+                            <span></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="preferences">
+        <div class="custom-select">
+            <select name="sorting-select" id="sorting">
+                <option value="hold">Sort By: </option>
+                <option value="distance">Distance</option>
+                <option value="rating">Rating</option>
+            </select>
+        </div>
+        <div class="custom-select">
+            <select name="distance-select" id="distance">
+                <option value="hold">Distance: </option>
+                <option value="Any">Any</option>
+                <option value="1">1 mile</option>
+                <option value="2">2 miles</option>
+                <option value="5">5 miles</option>
+                <option value="10">10 miles</option>
+                <option value="20">20 miles</option>
+            </select>
+        </div>
+        <div class="custom-select">
+            <select name="rating-select" id="rating">
+                <option value="hold">Rating: </option>
+                <option value="Any">Any</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+            </select>
+        </div>
+        <div class="custom-select">
+            <select name="cuisine-select" id="cuisine">
+                <option value="hold">Cuisine: </option>
+                <option value="Any">Any</option>
+                <option value="French">French</option>
+                <option value="American">American</option>
+                <option value="Mexican">Mexican</option>
+                <option value="Italian">Italian</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Indian">Indian</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Ethiopian">Ethiopian</option>
+                <option value="Lebanese">Lebanese</option>
+                <option value="Kosher">Kosher</option>
+                <option value="Thai">Thai</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Cuban">Cuban</option>
+            </select>
+        </div>
+        <button type="submit" class="apply">
+            Apply
+        </button>
+    </div>
+    <script src="please.js"></script>
+</body>
+</html>
