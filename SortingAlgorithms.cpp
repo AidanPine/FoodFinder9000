@@ -93,6 +93,59 @@ void QuickSort(Restaurant array[], int low, int high)
     }
 }
 
+void Merge(Restaurant array[], int start, int mid, int end){
+    int leftCount = mid - start + 1;
+    int rightCount = end - mid;
+    Restaurant left[leftCount];
+    Restaurant right[rightCount];
+
+
+
+    //Left and right subarrays
+    for(int i = 0; i < leftCount; i++){
+        left[i] = array[start + i];
+    }
+    for(int i = 0; i < rightCount; i++){
+        right[i] = array[mid + 1 +i];
+    }
+
+    int leftIndex = 0;
+    int rightIndex = 0;
+    int arrIndex = start;
+    //Initial merge instructions
+    while(leftIndex < leftCount && rightIndex < rightCount){
+        if(left[leftIndex].simScore > right[rightIndex].simScore){
+            swap(array[arrIndex], left[leftIndex]);
+            leftIndex++;
+        }
+        else{
+            swap(array[arrIndex], right[rightIndex]);
+            rightIndex++;
+        }
+        arrIndex++;
+    }
+    //Copy leftover values
+    while(leftIndex < leftCount){
+        swap(array[arrIndex], left[leftIndex]);
+        leftIndex++;
+        arrIndex++;
+    }
+    while(rightIndex < rightCount){
+        swap(array[arrIndex], right[rightIndex]);
+        rightIndex++;
+        arrIndex++;
+    }
+}
+
+void MergeSort(Restaurant array[], int start, int end){
+    if(start < end) {
+        int mid = (end + start) / 2;
+        MergeSort(array, start, mid);
+        MergeSort(array, mid + 1, end);
+        Merge(array, start, mid, end);
+    }
+}
+
 int main()
 {
     return 0;
