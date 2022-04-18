@@ -93,20 +93,20 @@ void QuickSort(vector<Restraunt> &array, int low, int high)
     }
 }
 
-void Merge(Restaurant array[], int start, int mid, int end){
+void Merge(std::vector<Restaurant>& array, int start, int mid, int end){
     int leftCount = mid - start + 1;
     int rightCount = end - mid;
-    Restaurant left[leftCount];
-    Restaurant right[rightCount];
+    std::vector<Restaurant> left;
+    std::vector<Restaurant> right;
 
 
 
     //Left and right subarrays
     for(int i = 0; i < leftCount; i++){
-        left[i] = array[start + i];
+        left.push_back(array[start + i]);
     }
     for(int i = 0; i < rightCount; i++){
-        right[i] = array[mid + 1 +i];
+        right.push_back(array[mid + 1 +i]);
     }
 
     int leftIndex = 0;
@@ -137,7 +137,7 @@ void Merge(Restaurant array[], int start, int mid, int end){
     }
 }
 
-void MergeSort(Restaurant array[], int start, int end){
+void MergeSort(std::vector<Restaurant>& array, int start, int end){
     if(start < end) {
         int mid = (end + start) / 2;
         MergeSort(array, start, mid);
