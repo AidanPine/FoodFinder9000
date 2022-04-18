@@ -47,7 +47,7 @@ public:
     }
 };
 
-int partition(Restaurant array[], int low, int high)
+int partition(vector<Restraunt> &array, int low, int high)
 {
     float pivot = array[low].simScore;
     int up = low;
@@ -56,7 +56,7 @@ int partition(Restaurant array[], int low, int high)
     {
         for(int i = up; i < high; i++)
         {
-            if(array[up].simScore > pivot)
+            if(array[up].simScore < pivot)
             {
                 break;
             }
@@ -64,7 +64,7 @@ int partition(Restaurant array[], int low, int high)
         }
         for(int i = high; i > low; i--)
         {
-            if(array[down].simScore < pivot)
+            if(array[down].simScore > pivot)
             {
                 break;
             }
@@ -79,7 +79,7 @@ int partition(Restaurant array[], int low, int high)
     return down;
 }
 
-void QuickSort(Restaurant array[], int low, int high)
+void QuickSort(vector<Restraunt> &array, int low, int high)
 {
     if(low >= high)
     {
