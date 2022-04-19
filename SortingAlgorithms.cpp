@@ -4,6 +4,8 @@
 #include <cstdlib>
 using namespace std;
 
+// Restaurant names come from https://namesbee.com/restaurant-names/ 
+
 class Restaurant
 {
 private:
@@ -79,6 +81,7 @@ int partition(vector<Restraunt> &array, int low, int high)
     return down;
 }
 
+// call with the dataset, 0, and the size - 1
 void QuickSort(vector<Restraunt> &array, int low, int high)
 {
     if(low >= high)
