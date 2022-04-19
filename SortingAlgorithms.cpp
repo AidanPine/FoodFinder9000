@@ -1,48 +1,47 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdlib>
 using namespace std;
 
-// dummy class
 class Restaurant
 {
 private:
 public:
-
+    
     int rating;
     float distance;
     string cuisine;
     string name;
     float simScore;
-
-
+   
     // passes in the data set, the searched values, and the preferred way of sorting (distanceOrRating is true if distance is preferred)
-    void setSimScores(Restaurant array[], float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
+    void setSimScores(vector<Restaurant> dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
     {
         // sets sim scores with a preference towards distance
         if(distanceOrRating)
         {
-            for(int i = 0; i < sizeof(array); i++)
+            for(int i = 0; i < sizeof(dataSet); i++)
             {
                 int simScoreCuisine = -1;
-                if(array[i].name == prefCuisine)
+                if(dataSet[i].name == prefCuisine)
                 {
                     simScoreCuisine = 1;
                 }
-                array[i].simScore = (.75 * ((prefDistance - array[i].distance) / prefDistance)) + (.15 * ((array[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
+                dataSet[i].simScore = (.75 * ((prefDistance - dataSet[i].distance) / prefDistance)) + (.15 * ((dataSet[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
             }
         }
         // sets sim scores with a preference towards rating
         else
         {
-            for(int i = 0; i < sizeof(array); i++)
+            for(int i = 0; i < sizeof(dataSet); i++)
             {
                 int simScoreCuisine = -1;
-                if(array[i].name == prefCuisine)
+                if(dataSet[i].name == prefCuisine)
                 {
                     simScoreCuisine = 1;
                 }
-                array[i].simScore = (.15 * ((prefDistance - array[i].distance) / prefDistance)) + (.75 * ((array[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
+                dataSet[i].simScore = (.15 * ((prefDistance - dataSet[i].distance) / prefDistance)) + (.75 * ((dataSet[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
             }
         }
     }
@@ -145,6 +144,114 @@ void MergeSort(std::vector<Restaurant>& array, int start, int end){
         MergeSort(array, mid + 1, end);
         Merge(array, start, mid, end);
     }
+}
+
+vector<Restaurant> makeData(int numbOfRestaurant)
+{
+    vector<Restaurant> dataSet;
+    for(int i = 0; i < numbOfRestaurant; i++)
+    {
+        vector<string> cuisineTypes {"American", "French", "Mexican", "Italian", "Japanese", "Indian", "Chinese","African", "Lebanese", "Kosher", "Thai", "Spanish", "Cuban"};
+        vector<string> restaurantNames {"Benno Restaurant", "Benno Restaurant", "Big Moe's Diner" , "Pizza Italian Heart", "Smokey's Texas Grill",
+                                        "USA Bakery", "Papa John's", "Karachi Silver Spoon", "Pizzeria Cafe", "Jockey", "Oriole", "Zahav",
+                                        "Gramercy Tavern", "Le Bernardin", "Alinea", "Daniel", "Manresa", "Lahaina Grill", "Canlis", "Le Coucou",
+                                        "Le Diplomate", "The Modern", "Momofuku Ko", "Vernick Food & Drink", "Monteverde Restaurant & Pastificio",
+                                        "Girl & The Goat", "Next Restaurant", "Eleven Madison Park", "Marea", "Boka", "Gotham", "Benu", "Saison",
+                                        "Talula's Garden", "Blue Hill", "Charleston", "Le Pigeon", "Highlands Bar & Grill", "Vetri Cucina",
+                                        "Gabriel Kreuther","Del Posto", "Coquine", "Kokkari Estiatorio", "Quince", "Acquerello", "Blue Smoke",
+                                        "Bohemian","Carmine's Italian Restaurant","Club A Steakhouse", "Your Aesthetic","Alphabet Eatery",
+                                        "Let's Ambush","Anna Bella", "Arrow Spoon", "The Taste and Beyond", "Blind Faith","Blue Valley",
+                                        "Breakfast at any Time", "Cast Diners", "Cheesy Love", "Chef First", "The Eclectic Taste","Chef Parade",
+                                        "Chicken and Spices", "Chili Flora", "Chipotle Meal", "Classic Corn in", "Crazy Cut","Crazy Grill",
+                                        "The Lakhani", "The Hebbet", "Seven Spices", "Hot Gear", "Hollo Follo", "Hill Crest","Heart Beats food",
+                                        "Harley Food Center", "Grebb", "Brewhouse", "Dine Fine", "Perfect Place","Pointe Restaurant", "The Spice",
+                                        "Gourmet Meal", "Tavern", "Fresh Ingredients", "Umami Burger","Amsterdam", "Finest Dining", "Tofino",
+                                        "Pasta Beach", "French Gourmet", "Oasis Cafe", "Mediterranean Seafood", "Sensory Experience", "Fish and Chips",
+                                        "Phuc Noodle", "Captiva Island", "Perfect Dish", "Pinch Kitchen", "Pita Pan", "Plane Grill", "Planet of the Grapes",
+                                        "Plumed Horse", "PM Fish & Steak House", "Poke Life", "Project Juice", "Quick Eats", "Rainforest Cafe",
+                                        "Ready Restaurants", "Red Dragon", "Red Tablecloth", "Revelry Bistro", "Rice House", "Rich Table", "Rocco's Cafe",
+                                        "Rock and Roll cafe", "Rolls", "Salted Grill", "Fred's Tacos Corner", "Fatty Fingers", "Eat Bite", "Desi Eatery",
+                                        "Dagny's Delight", "Curry Out", "Crew Cafe", "The Elephant and the Mouse", "The Lazy Lemur", "Naan Better", "The Hungrella",
+                                        "Hurry Curry", "Mad Munch", "MadWings", "Chophouse", "Porridge Cafe", "Homemade Bagels", "Strip Steak", "Burger King",
+                                        "Steam Plant", "Pho Shizzle", "Salty Squid", "Sea Spice", "Shaker + Spear", "Skillet Counter", "Sloppy Eats",
+                                        "Soul Food", "Spice Villa", "Spicy Dragon", "Street Delights", "Sugar Blast", "Sunrise Cafe", "Taco Mayo",
+                                        "Tall Oaks Cafe", "Bones Restaurant", "ATOMIX", "Cafe Monarch", "Charleston Grill", "Restaurant Gordon Ramsay",
+                                        "Spoon and Stable", "Melisse Restaurant", "Jean-Georges", "Rose's Luxury", "Frasca Food and Wine", "FIG",
+                                        "The Old Fashioned", "The Table", "Mama's Fish House", "COI", "GW Fins", "Open Zest", "Palm Crown",
+                                        "The New Montana Restaurant", "Sharp Knives", "Snack Bar Express", "Street Stuff", "Sweet Munchies",
+                                        "Suede Dinner", "Vintage Burgers", "Wave's", "West Coast Chef", "Tribal Fiesta", "Chipotle Mexican Grill",
+                                        "Banana Leaf", "Spear Smoque", "Thai Me Up", "Thai The Knot", "The Back Room", "The Breakfast Story",
+                                        "The Cafe Baraco", "The Capital Grille", "The Chef in the Hat","The Dinning Room", "The Fishery",
+                                        "The Food Place", "The French Gourmet", "The Golden Stool", "Les Nomades", "The Original", "CRUST",
+                                        "Gordon Ramsay Hell's Kitchen", "LEON", "Aliada", "Patina Restaurant", "Cliff House", "Lawry's The Prime Rib",
+                                        "Bryant Park Grill", "Rudy & Paco Restaurant and Bar", "Gibsons Bar & Steakhouse", "Atelier Crenn",
+                                        "Orchids at Palm Court", "The Compound Restaurant", "Masa", "Crisp", "The Aviary", "Tasty Elements",
+                                        "Starbelly", "Pier 23", "Lord Stanley", "Gemini", "Catch 35", "Blue Plate", "Burger & Beer Joint",
+                                        "CRUST", "Full Moon", "Grubstake", "Hot & Crusty", "A Salt & Battery", "Chart House", "Double Decker",
+                                        "Foxsister", "Halls Chophouse", "King and Queen", "Lazy Bear", "Mad for Chicken", "Americano", "Buccan",
+                                        "Blue Hill At Stone Barns", "Boston's Restaurant & Sports Bar", "Cured", "Johnny Rockets", "The Root Cafe",
+                                        "Lantern", "Handle", "Chin Chin Las Vegas", "Next Door American Eatery","V's Italiano Ristorante",
+                                        "S. Egg Brunch Restaurant North Scottsdale", "Eat Restaurant", "The Breakfast Bar", "The Chef",
+                                        "La Lucha", "Chimney Park Restaurant & Bar", "Chez Panisse", "Vie Restaurant", "Pizzeria Delfina Mission",
+                                        "The Sea Spice", "German Food", "The Ledbury", "Stateside", "The Capital Grille", "The Egg & Us", "The Local Eatery",
+                                        "The River Seafood", "Townsend", "Wise Sons", "Zero Restaurant", "Bean Around", "Chewy Balls", "Double Knot",
+                                        "Fog Harbor", "Hereford Grill", "Like No Udder", "Munch Box", "North Beach", "Queenstown Public House",
+                                        "True Food Kitchen", "The Local House", "Stomach Clinic", "Sundown at Granada", "HG Sply Co.", "Toulouse Knox Street",
+                                        "Taverna", "Al Biernat's", "Up On Knox", "Thai Thai Restaurant", "Pecan Lodge", "The Capital Grille",
+                                        "The Polo Bar", "The Red Door", "The Rosebud", "The Saddle River Inn", "The Slanted Door", "The Spanish Kitchen",
+                                        "Tin Roof", "Top of the Market", "Townsend", "Udupi", "Unique Meals", "Urban Remedy", "Vegans Come Here",
+                                        "Vessel Restaurant", "Vietnamese Street Food", "Walton's Restaurant", "Water Grill", "Wok This Way",
+                                        "Xin Chao Vietnamese Restaurant", "Your Cook", "Columbia Restaurant Celebration", "CityGrocery",
+                                        "The Proper Restaurant & Bar", "Moto", "ROKU", "The Mill Restaurant", "Turn", "Heart Attack Grill",
+                                        "Top NotchHamburgers", "Honest Restaurant Lowell", "Proof Restaurant", "Kura Revolving Sushi Bar",
+                                        "Di Fara Pizza", "Valor Glencoe", "All Set Restaurant & Bar", "Sister", "Chipotle", "Story Restaurant",
+                                        "Thrive", "The Pantry Restaurant", "The Federal", "Tom's Sushi House", "Le Parfait", "Bright", "Sabor",
+                                        "Dinner by Heston Blumenthal", "Scully St James's", "Angler","Dobar", "Kinship", "Caviar Bar",
+                                        "Fishing with Dynamite", "Conch it Up Soul Food", "California Pizza Kitchen", "BeaverChoice", "Pita Pan",
+                                        "Sears Fine Food", "The Bear & The Monarch", "The Patio", "Zareen's", "Sushi Tomi", "Cascal",
+                                        "Crepevine Restaurants", "Eureka!", "Paul Martin's America", "Napoletana Pizzeria", "Le Petit Bistro",
+                                        "ViVe Sol", "SAJJ Mediterranean", "Ding Tai Fung", "El Mercado Restaurant", "MELT", "Dozens Restaurant",
+                                        "BREWED", "The Standard", "Nusr-Et Steakhouse Dallas", "Steve & Cookie's By the Bay", "The Oven",
+                                        "Carlos' Bistro", "AVANT Restaurant", "The Taste", "The Peak", "Social", "Nathan's Famous", "The Local",
+                                        "Fine Burgers & Drinks", "The Place", "Zona Italian Restaurant", "Start Restaurant", "Sizzler",
+                                        "Los Padres Mexican Food", "The Point Restaurant", "The Point Bar & Grill", "A&W", "The Loop Minneapolis",
+                                        "Fin Japanese Cuisine", "Around the Corner", "Lawry's Restaurants, Inc.", "Benihana", "Hanna's",
+                                        "Casa Bonita", "Curbside Burgers", "The Dallas World Aquarium", "Denny's", "The Roof", "Cinco Mexican Cantina",
+                                        "Companion Bakery", "Breakfast Nook", "The Inn at Little Washington", "Local Beer, Patio and Kitchen",
+                                        "The Original Mexican Restaurant","St Francis Winery & Vineyards", "The MARK", "Cinemark Hollywood Movies 20",
+                                        "US Foods CHEF'STORE", "Darden Restaurants", "All Elite Food", "Alpine Meadow", "At Your Service", "Bacon Babe Burgers",
+                                        "Bankers Hill", "Barefoot Bar & Grill", "Basic Kneads Pizza", "BBQ Night", "Beanburgers", "Before the Bistro","Big Bills",
+                                        "Big Chef", "Big Mountain", "Bistro","Bite Me Sandwiches", "Bite-Sized", "Blue Collar", "Blue Mermaid", "Boogie bites",
+                                        "Bread And Butter", "Breakfast House", "Brick House Stackhouse", "Brothers Railroad Inn", "Burger & Beer Joint",
+                                        "Burger UK London", "Burma Love", "Cafe21", "Cafe Coyote", "Cafe Provence", "California Pizza Kitchen", "Cat Heads BBQ",
+                                        "Catch of the Day", "Cheesy", "Chewy Balls", "Chicago", "Chilango", "Chops N' Drinks", "Circus", "City View Restaurant",
+                                        "Coffee and Cake", "Corner", "Cosmopolitan Restaurant", "Crabby Dick's", "Crown Crest", "Crusty Chicken", "Curated Cuisine",
+                                        "Curry", "Daily Grill", "Dedicated Dining", "Delightful Dining", "Detox Kitchen", "Dine Dime", "Dining Delight",
+                                        "Dining Room Ready", "Dinner by HestonBlumenthal", "Double Knot", "Drink And Dive", "East Meets West", "Eat Your Heart Out",
+                                        "El Charro of Iola", "Emerald Grill", "Everest", "Famous Lunch", "Fiddler's Green", "Fine Dining Delivered", "Food O'clock",
+                                        "Firefly Resort", "Five Oceans", "Flame On", "Fog City", "Food Addict", "Fishing with Dynamite", "Food Court", "Food Formula",
+                                        "Food Town", "FoodiesUnites", "Foodstuff", "Formal Performance", "Full Belly Belles", "Garage Kitchen + Bar", "Gem Cafe",
+                                        "Geronimo", "Golden Era", "Goldfinch Tavern", "Good Morning", "King and Queen", "King Lee's", "Mad Chicken", "Mad for Chicken",
+                                        "Fury Kitchen", "Koi's Sushi's", "Last Time", "Le Parfait", "Lettuce Eat", "Lionfish", "Little London", "Long Eel",
+                                        "Lord Stanley", "Love Shack Foods", "Lunch Chow", "Malabar", "Marina Kitchen", "Masa Grill Kabob", "Maude", "Meat U There",
+                                        "Mess Hall", "Blue Mermaid", "Duke's Seafood", "Hillstone", "Cat Heads BBQ", "Eatmore Fried Chicken", "Great Eastern",
+                                        "BarefootBar & Grill", "Little Sheep", "Metro Cafe", "Ocean Star", "Peking Inn", "Single Shot", "Thai Me Up",
+                                        "Harbor City", "Metropolitan Grill", "Rice House", "The House", "The Kitchen", "The Mission", "Tin Roof", "Barley Mash",
+                                        "Coaster Saloon","Waterfront", "The Old Spaghetti", "Tanta", "Sotto", "Revelry Bistro", "Next", "Kum Den Bar",
+                                        "Goldfinch Tavern", "Zum Schweizerhaus", "Spice Bazaar", "Urchig", "Alpenclub", "Stand", "Ski Lodge Engelberg"};
+
+        Restaurant* newRestraunt = new Restaurant;
+        newRestraunt->rating = rand() % 5;
+        float temp = rand() % 100 ;
+        temp = temp / 100;
+        newRestraunt->distance = rand() % 49 + temp;
+        int cuisineLocation = rand() % cuisineTypes.size();
+        newRestraunt->cuisine = cuisineTypes.at(cuisineLocation);
+        int nameLocation = rand() % restaurantNames.size();
+        newRestraunt->name = restaurantNames.at(nameLocation);
+        dataSet.push_back(*newRestraunt);
+    }
+    return dataSet;
 }
 
 int main()
