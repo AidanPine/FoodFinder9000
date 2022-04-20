@@ -61,6 +61,7 @@ void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRatin
     }
 }
 
+// function that finds values that are lower and higher than the pivot and swaps them accordingly
 int partition(vector<Restaurant> &array, int low, int high)
 {
     float pivot = array[low].simScore;
@@ -159,9 +160,11 @@ void MergeSort(std::vector<Restaurant>& array, int start, int end){
     }
 }
 
+// function to create a vector with the specific number of restaurant objects
 vector<Restaurant> makeData(int numbOfRestaurant)
     {
         vector<Restaurant> dataSet;
+        // possible cuisines and names
         vector<string> cuisineTypes {"American", "French", "Mexican", "Italian", "Japanese", "Indian", "Chinese","Ethiopian", "Lebanese", "Kosher", "Thai", "Spanish", "Cuban"};
         vector<string> restaurantNames {"Benno Restaurant", "Benno Restaurant", "Big Moe's Diner" , "Pizza Italian Heart", "Smokey's Texas Grill",
                                         "USA Bakery", "Papa John's", "Karachi Silver Spoon", "Pizzeria Cafe", "Jockey", "Oriole", "Zahav",
@@ -250,6 +253,7 @@ vector<Restaurant> makeData(int numbOfRestaurant)
                                         "Harbor City", "Metropolitan Grill", "Rice House", "The House", "The Kitchen", "The Mission", "Tin Roof", "Barley Mash",
                                         "Coaster Saloon","Waterfront", "The Old Spaghetti", "Tanta", "Sotto", "Revelry Bistro", "Next", "Kum Den Bar",
                                         "Goldfinch Tavern", "Zum Schweizerhaus", "Spice Bazaar", "Urchig", "Alpenclub", "Stand", "Ski Lodge Engelberg", "McDongalds Borger"};
+        // creates restaurant object's with randomized data and inserts it into the vector
         for(int i = 0; i < numbOfRestaurant; i++)
         {
             Restaurant newRestaurant = Restaurant();
