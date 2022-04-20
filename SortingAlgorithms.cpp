@@ -18,7 +18,7 @@ public:
     float simScore;
    
     // passes in the data set, the searched values, and the preferred way of sorting (distanceOrRating is true if distance is preferred)
-    void setSimScores(vector<Restaurant> dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
+    void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
     {
         // sets sim scores with a preference towards distance
         if(distanceOrRating)
