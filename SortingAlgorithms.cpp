@@ -16,9 +16,10 @@ public:
     string cuisine;
     string name;
     float simScore;
+};
 
-    // passes in the data set, the searched values, and the preferred way of sorting (distanceOrRating is true if distance is preferred)
-    void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
+// passes in the data set, the searched values, and the preferred way of sorting (distanceOrRating is true if distance is preferred)
+   void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
     {
         // sets sim scores with a preference towards distance
         if(distanceOrRating)
@@ -46,8 +47,7 @@ public:
                 dataSet[i].simScore = (.15 * ((prefDistance - dataSet[i].distance) / prefDistance)) + (.75 * ((dataSet[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
             }
         }
-    }
-};
+   }
 
 int partition(vector<Restaurant> &array, int low, int high)
 {
