@@ -29,16 +29,15 @@ void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRatin
     // sets sim scores with a preference towards distance
     if(distanceOrRating)
     {
-        for(int i = 0; i < dataSet.size(); i++)
-        {
+        for(int i = 0; i < dataSet.size(); i++) {
             int simScoreCuisine = -1;
-            int ratingFit = -1;
+            int ratingFit = 1;
             if(dataSet[i].cuisine == prefCuisine | prefCuisine == "Any")
             {
                 simScoreCuisine = 1;
             }
-            if(dataSet[i].rating >= prefRating | prefRating == 0) {
-                ratingFit = 1;
+            if(dataSet[i].rating < prefRating & prefRating != 0) {
+                ratingFit = (dataSet[i].rating - prefRating) / 5.0;
             }
             dataSet[i].simScore = (.75 * ((prefDistance - dataSet[i].distance) / prefDistance)) + ratingFit + simScoreCuisine;
         }
@@ -49,13 +48,13 @@ void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRatin
         for(int i = 0; i < dataSet.size(); i++)
         {
             int simScoreCuisine = -1;
-            int disFit = -1;
+            int disFit = 1;
             if(dataSet[i].cuisine == prefCuisine | prefCuisine == "Any")
             {
                 simScoreCuisine = 1;
             }
-            if (dataSet[i].distance <= prefDistance | prefDistance == 10000) {
-                disFit = 1;
+            if (dataSet[i].distance > prefDistance & prefDistance != 10000) {
+                disFit = (prefDistance - dataSet[i].distance) / prefDistance;
             }
             dataSet[i].simScore = disFit + (.75 * ((dataSet[i].rating - prefRating) / 5.0)) + (1 * simScoreCuisine);
         }
