@@ -4,42 +4,42 @@
 #include <cstdlib>
 using namespace std;
 
-// Restaurant names come from https://namesbee.com/restaurant-names/ 
+// Restaurant names come from https://namesbee.com/restaurant-names/
 
 class Restaurant
 {
 private:
 public:
-    
+
     int rating;
     float distance;
     string cuisine;
     string name;
     float simScore;
-   
+
     // passes in the data set, the searched values, and the preferred way of sorting (distanceOrRating is true if distance is preferred)
     void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
     {
         // sets sim scores with a preference towards distance
         if(distanceOrRating)
         {
-            for(int i = 0; i < sizeof(dataSet); i++)
+            for(int i = 0; i < dataSet.size(); i++)
             {
                 int simScoreCuisine = -1;
-                if(dataSet[i].name == prefCuisine)
+                if(dataSet[i].cuisine == prefCuisine)
                 {
                     simScoreCuisine = 1;
                 }
                 dataSet[i].simScore = (.75 * ((prefDistance - dataSet[i].distance) / prefDistance)) + (.15 * ((dataSet[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
             }
         }
-        // sets sim scores with a preference towards rating
+            // sets sim scores with a preference towards rating
         else
         {
-            for(int i = 0; i < sizeof(dataSet); i++)
+            for(int i = 0; i < dataSet.size(); i++)
             {
                 int simScoreCuisine = -1;
-                if(dataSet[i].name == prefCuisine)
+                if(dataSet[i].cuisine == prefCuisine)
                 {
                     simScoreCuisine = 1;
                 }
@@ -49,7 +49,7 @@ public:
     }
 };
 
-int partition(vector<Restraunt> &array, int low, int high)
+int partition(vector<Restaurant> &array, int low, int high)
 {
     float pivot = array[low].simScore;
     int up = low;
@@ -82,7 +82,7 @@ int partition(vector<Restraunt> &array, int low, int high)
 }
 
 // call with the dataset, 0, and the size - 1
-void QuickSort(vector<Restraunt> &array, int low, int high)
+void QuickSort(vector<Restaurant> &array, int low, int high)
 {
     if(low >= high)
     {
