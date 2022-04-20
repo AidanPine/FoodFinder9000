@@ -2,7 +2,11 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
-using namespace std;
+#include <emscripten/bind.h>
+using namespace emscripten;
+using std::vector;
+using std::string;
+using std::swap;
 
 // Restaurant names come from https://namesbee.com/restaurant-names/
 
@@ -16,69 +20,76 @@ public:
     string cuisine;
     string name;
     float simScore;
+
 };
 
 // passes in the data set, the searched values, and the preferred way of sorting (distanceOrRating is true if distance is preferred)
-   void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
+void setSimScores(vector<Restaurant>& dataSet, float prefDistance, int prefRating, string prefCuisine, bool distanceOrRating)
+{
+    // sets sim scores with a preference towards distance
+    if(distanceOrRating)
     {
-        // sets sim scores with a preference towards distance
-        if(distanceOrRating)
+        for(int i = 0; i < dataSet.size(); i++)
         {
-            for(int i = 0; i < dataSet.size(); i++)
+            int simScoreCuisine = -1;
+            int ratingFit = -1;
+            if(dataSet[i].cuisine == prefCuisine | prefCuisine == "Any")
             {
-                int simScoreCuisine = -1;
-                if(dataSet[i].cuisine == prefCuisine)
-                {
-                    simScoreCuisine = 1;
-                }
-                dataSet[i].simScore = (.75 * ((prefDistance - dataSet[i].distance) / prefDistance)) + (.15 * ((dataSet[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
+                simScoreCuisine = 1;
             }
+            if(dataSet[i].rating >= prefRating | prefRating == 0) {
+                ratingFit = 1;
+            }
+            dataSet[i].simScore = (.75 * ((prefDistance - dataSet[i].distance) / prefDistance)) + ratingFit + simScoreCuisine;
         }
-            // sets sim scores with a preference towards rating
-        else
+    }
+        // sets sim scores with a preference towards rating
+    else
+    {
+        for(int i = 0; i < dataSet.size(); i++)
         {
-            for(int i = 0; i < dataSet.size(); i++)
+            int simScoreCuisine = -1;
+            int disFit = -1;
+            if(dataSet[i].cuisine == prefCuisine | prefCuisine == "Any")
             {
-                int simScoreCuisine = -1;
-                if(dataSet[i].cuisine == prefCuisine)
-                {
-                    simScoreCuisine = 1;
-                }
-                dataSet[i].simScore = (.15 * ((prefDistance - dataSet[i].distance) / prefDistance)) + (.75 * ((dataSet[i].rating - prefRating) / 5)) + (1 * simScoreCuisine);
+                simScoreCuisine = 1;
             }
+            if (dataSet[i].distance <= prefDistance | prefDistance == 10000) {
+                disFit = 1;
+            }
+            dataSet[i].simScore = disFit + (.75 * ((dataSet[i].rating - prefRating) / 5.0)) + (1 * simScoreCuisine);
         }
-   }
+    }
+}
 
 int partition(vector<Restaurant> &array, int low, int high)
 {
     float pivot = array[low].simScore;
-    int up = low;
-    int down = high;
-    while(up < down)
+    int up = low - 1;
+    int down = high + 1;
+    while(true)
     {
-        for(int i = up; i < high; i++)
-        {
-            if(array[up].simScore < pivot)
-            {
-                break;
-            }
+        do {
             up++;
-        }
-        for(int i = high; i > low; i--)
-        {
-            if(array[down].simScore > pivot)
-            {
-                break;
-            }
+        } while (array[up].simScore > pivot);
+
+        do {
             down--;
-        }
-        if(up < down)
-        {
-            swap(array[up], array[down]);
-        }
+        } while (array[down].simScore < pivot);
+
+        if (up >= down)
+            return down;
+
+        swap(array[up], array[down]);
     }
-    swap(array[low], array[down]);
-    return down;
+}
+
+// randomize pivot
+int partition_r(vector<Restaurant> &array, int low, int high) {
+    srand(time(NULL));
+    int random = low + rand() % (high-low);
+    swap(array[random], array[low]);
+    return partition(array, low, high);
 }
 
 // call with the dataset, 0, and the size - 1
@@ -90,8 +101,8 @@ void QuickSort(vector<Restaurant> &array, int low, int high)
     }
     if(low < high)
     {
-        int pivot = partition(array, low, high);
-        QuickSort(array, low, pivot - 1);
+        int pivot = partition_r(array, low, high);
+        QuickSort(array, low, pivot);
         QuickSort(array, pivot + 1, high);
     }
 }
@@ -150,11 +161,9 @@ void MergeSort(std::vector<Restaurant>& array, int start, int end){
 }
 
 vector<Restaurant> makeData(int numbOfRestaurant)
-{
-    vector<Restaurant> dataSet;
-    for(int i = 0; i < numbOfRestaurant; i++)
     {
-        vector<string> cuisineTypes {"American", "French", "Mexican", "Italian", "Japanese", "Indian", "Chinese","African", "Lebanese", "Kosher", "Thai", "Spanish", "Cuban"};
+        vector<Restaurant> dataSet;
+        vector<string> cuisineTypes {"American", "French", "Mexican", "Italian", "Japanese", "Indian", "Chinese","Ethiopian", "Lebanese", "Kosher", "Thai", "Spanish", "Cuban"};
         vector<string> restaurantNames {"Benno Restaurant", "Benno Restaurant", "Big Moe's Diner" , "Pizza Italian Heart", "Smokey's Texas Grill",
                                         "USA Bakery", "Papa John's", "Karachi Silver Spoon", "Pizzeria Cafe", "Jockey", "Oriole", "Zahav",
                                         "Gramercy Tavern", "Le Bernardin", "Alinea", "Daniel", "Manresa", "Lahaina Grill", "Canlis", "Le Coucou",
@@ -241,23 +250,39 @@ vector<Restaurant> makeData(int numbOfRestaurant)
                                         "BarefootBar & Grill", "Little Sheep", "Metro Cafe", "Ocean Star", "Peking Inn", "Single Shot", "Thai Me Up",
                                         "Harbor City", "Metropolitan Grill", "Rice House", "The House", "The Kitchen", "The Mission", "Tin Roof", "Barley Mash",
                                         "Coaster Saloon","Waterfront", "The Old Spaghetti", "Tanta", "Sotto", "Revelry Bistro", "Next", "Kum Den Bar",
-                                        "Goldfinch Tavern", "Zum Schweizerhaus", "Spice Bazaar", "Urchig", "Alpenclub", "Stand", "Ski Lodge Engelberg"};
-
-        Restaurant* newRestraunt = new Restaurant;
-        newRestraunt->rating = rand() % 5;
-        float temp = rand() % 100 ;
-        temp = temp / 100;
-        newRestraunt->distance = rand() % 49 + temp;
-        int cuisineLocation = rand() % cuisineTypes.size();
-        newRestraunt->cuisine = cuisineTypes.at(cuisineLocation);
-        int nameLocation = rand() % restaurantNames.size();
-        newRestraunt->name = restaurantNames.at(nameLocation);
-        dataSet.push_back(*newRestraunt);
+                                        "Goldfinch Tavern", "Zum Schweizerhaus", "Spice Bazaar", "Urchig", "Alpenclub", "Stand", "Ski Lodge Engelberg", "McDongalds Borger"};
+        for(int i = 0; i < numbOfRestaurant; i++)
+        {
+            Restaurant newRestaurant = Restaurant();
+            newRestaurant.rating = rand() % 6;
+            float temp = rand() % 100 ;
+            temp = temp / 100;
+            newRestaurant.distance = rand() % 49 + temp;
+            int cuisineLocation = rand() % cuisineTypes.size();
+            newRestaurant.cuisine = cuisineTypes.at(cuisineLocation);
+            int nameLocation = rand() % restaurantNames.size();
+            newRestaurant.name = restaurantNames.at(nameLocation);
+            dataSet.push_back(newRestaurant);
+        }
+        return dataSet;
     }
-    return dataSet;
-}
 
-int main()
-{
-    return 0;
+EMSCRIPTEN_BINDINGS(my_module) {
+
+    class_<Restaurant>("Restaurant")
+        .constructor<>()
+        .property("rating",&Restaurant::rating)
+        .property("distance", &Restaurant::distance)
+        .property("cuisine", &Restaurant::cuisine)
+        .property("name", &Restaurant::name)
+        .property("simScore", &Restaurant::simScore)
+    ;
+
+    function("setSimScores", &setSimScores);
+    function("makeData", &makeData);
+    function("QuickSort", &QuickSort);
+    function("MergeSort", &MergeSort);
+
+    register_vector<Restaurant>("vector<Restaurant>");
+    register_vector<string>("vector<string>");
 }
