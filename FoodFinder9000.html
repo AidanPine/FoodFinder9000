@@ -9,10 +9,10 @@
 <body>
     <div class = 'search'>
         <label class="switch">
-            <input type="checkbox">
+            <input id="sort-type" type="checkbox">
             <div class="slider round">
                 <p id = "heap">
-                    Heap <br> Sort
+                    Quick <br> Sort
                 </p>
                 <p id = "merge">
                     Merge <br> Sort
@@ -22,15 +22,27 @@
         <div id="cover">
             <form method="get" action="">
                 <div class="tb">
-                    <div class="td"><input type="text" placeholder="Search" required></div>
+                    <div class="td">
+                        <label>
+                            <input type="text" placeholder="Search" id="search">
+                        </label>
+                    </div>
                     <div class="td" id="s-cover">
-                        <button type="submit">
+                        <button type="button">
                             <div id="s-circle"></div>
                             <span></span>
                         </button>
                     </div>
                 </div>
             </form>
+        </div>
+        <div id="timer">
+            <p id="sort-name">
+                Sort: ---
+            </p>
+            <p id="time">
+                --- ms
+            </p>
         </div>
     </div>
     <div class="preferences">
@@ -85,6 +97,10 @@
             Apply
         </button>
     </div>
-    <script src="please.js"></script>
+    <form id="results">
+    </form>
+    <div id="footer"></div>
 </body>
+<script src="SortingAlgorithms.js"></script>
+<script src="please.js"></script>
 </html>
