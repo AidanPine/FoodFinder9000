@@ -82,7 +82,7 @@ Module['onRuntimeInitialized'] = () => {
     document.addEventListener("click", closeAllSelect);
 
     /* Generate random data set */
-    var restaurants = Module.makeData(1000);
+    var restaurants = Module.makeData(100000);
 
     /* Functionality for apply button*/
 
@@ -158,7 +158,7 @@ Module['onRuntimeInitialized'] = () => {
         var startTime = performance.now();
 
         if (sortType === 'Merge Sort') {
-            Module.MergeSort(restaurants, 0, 1000-1);
+            Module.MergeSort(restaurants, 0, 100000-1);
         }
         else {
             Module.QuickSort(restaurants, 0, 1000-1);
